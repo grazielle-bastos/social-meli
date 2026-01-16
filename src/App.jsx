@@ -4,8 +4,8 @@ import { UserProvider } from "./UserContext";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
 import FollowersPage from "./pages/FollowersPage";
-/*import FollowedPage from './pages/FollowedPage';
-import FeedPage from './pages/FeedPage';
+import FollowedPage from "./pages/FollowedPage";
+/*import FeedPage from './pages/FeedPage';
 import PublishPage from './pages/PublishPage';
 import PromoPage from './pages/PromoPage';*/
 
@@ -21,8 +21,8 @@ function App() {
               path="/users/:userId/followers"
               element={<FollowersPage />}
             />
-            {/* <Route path="/users/:userId/followed" element={<FollowedPage />} />
-          <Route path="/users/:userId/feed" element={<FeedPage />} />
+            <Route path="/users/:userId/followed" element={<FollowedPage />} />
+            {/* <Route path="/users/:userId/feed" element={<FeedPage />} />
           <Route path="/publish" element={<PublishPage />} />
           <Route path="/users/:userId/promos" element={<PromoPage />} /> */}
           </Routes>

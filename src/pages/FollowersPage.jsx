@@ -50,6 +50,7 @@ function FollowersPage() {
   return (
     <div className="followers-page">
       <h1>Quem me segue</h1>
+
       <div className="order-controls">
         <label htmlFor="order-select">Ordenar por:</label>
         <select id="order-select" value={order} onChange={handleOrderChange}>
@@ -57,8 +58,11 @@ function FollowersPage() {
           <option value="name_desc">Nome (Z-A)</option>
         </select>
       </div>
+
       {loading && <p className="loading">Carregando...</p>}
+
       {error && <p className="error-message">{error}</p>}
+
       {!loading && !error && (
         <div className="followers-list">
           {followers.length > 0 ? (
