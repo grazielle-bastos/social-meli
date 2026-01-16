@@ -1,0 +1,56 @@
+.home-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.home-page h1 {
+  color: #333333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.user-info {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #3483FA; 
+}
+
+.user-info h2 {
+  color: #3483FA;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.user-info p {
+  color: #666666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.no-user {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #FFE600;
+  text-align: center;
+}
+
+.no-user h2 {
+  color: #333333;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.no-user p {
+  color: #666666;
+}
+
+.loading {
+  text-align: center;
+  color: #666666;
+  padding: 20px;
+}

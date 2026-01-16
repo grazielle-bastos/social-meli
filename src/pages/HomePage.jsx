@@ -1,11 +1,10 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useUser } from "../UserContext";
+import "./HomePage.css";
 
 function HomePage() {
+  const { userId } = useUser();
   const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState(
-    localStorage.getItem("activeUserId") || null
-  );
 
   useEffect(() => {
     if (userId) {
@@ -16,6 +15,7 @@ function HomePage() {
           setUser(data);
         } catch (error) {
           console.error("Erro ao buscar dados do usuário:", error);
+          setUser(null);
         }
       }
 
@@ -25,22 +25,9 @@ function HomePage() {
     }
   }, [userId]);
 
-  useEffect(() => {
-    function handleUserChange(event) {
-      console.log("userChanged event detected:", event.detail);
-      setUserId(event.detail);
-    }
-
-    window.addEventListener("userChanged", handleUserChange);
-
-    return () => {
-      window.removeEventListener("userChanged", handleUserChange);
-    };
-  }, []);
-
   return (
     <div className="home-page">
-      <h1>Bem-vindo ao SocialMeli</h1>
+      <h1>Bem-vindo ao Social Meli</h1>
 
       {user ? (
         <div className="user-info">

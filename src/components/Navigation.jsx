@@ -1,37 +1,33 @@
-import { Link } from 'react-router-dom';
-import UserSelector from './UserSelector';
-import { useState, useEffect } from 'react';
+import { NavLink } from "react-router-dom";
+import UserSelector from "./UserSelector";
+import { useUser } from "../UserContext";
+import "./Navigation.css";
 
 function Navigation() {
-  const [userId, setUserId] = useState(localStorage.getItem('activeUserId') || '');
-  
-  useEffect(() => {
-    function checkUserId() {
-      const storedId = localStorage.getItem('activeUserId') || '';
-      if (storedId !== userId) {
-        setUserId(storedId);
-      }
-    }
-    
-    const interval = setInterval(checkUserId, 500);
-    
-    return () => clearInterval(interval);
-  }, [userId]);
+  const { userId } = useUser();
 
   return (
-    <nav className="navbar">
-      <div className="logo">SocialMeli</div>
-      
+    <nav className="navigation">
+      <div className="nav-brand">
+        <img
+          src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadolibre/logo__small.png"
+          alt="Logo"
+          className="logo"
+        />
+      </div>
+
       <div className="nav-links">
-        <Link to="/">Início</Link>
-        
+        <NavLink to="/" end>
+          Início
+        </NavLink>
+
         {userId ? (
           <>
-            <Link to={`/users/${userId}/followers`}>Quem me segue</Link>
-            <Link to={`/users/${userId}/followed`}>Quem eu sigo</Link>
-            <Link to={`/users/${userId}/feed`}>Meu Feed</Link>
-            <Link to="/publish">Criar Publicação</Link>
-            <Link to={`/users/${userId}/promo-pub`}>Promoções</Link>
+            <NavLink to={`/users/${userId}/followers`}>Quem me segue</NavLink>
+            <NavLink to={`/users/${userId}/followed`}>Quem eu sigo</NavLink>
+            <NavLink to={`/users/${userId}/feed`}>Meu Feed</NavLink>
+            <NavLink to="/publish">Criar Publicação</NavLink>
+            <NavLink to={`/users/${userId}/promo-pub`}>Promoções</NavLink>
           </>
         ) : (
           <>
@@ -43,8 +39,8 @@ function Navigation() {
           </>
         )}
       </div>
-      
-      <UserSelector onUserChange={(id) => setUserId(id)} />
+
+      <UserSelector />
     </nav>
   );
 }

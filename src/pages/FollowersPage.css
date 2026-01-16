@@ -1,0 +1,73 @@
+.followers-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.followers-page h1 {
+  color: #333333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.followers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.follower-card {
+  background-color: rgba(255, 255, 255, 0.099);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #3483FA;
+  transition: transform 0.2s;
+}
+
+.follower-card:hover {
+  transform: translateY(-3px);
+}
+
+.follower-info h3 {
+  color: #3483FA;
+  margin: 0 0 8px 0;
+}
+
+.follower-info p {
+  color: #666666;
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666666;
+}
+
+.error-message {
+  background-color: #FFEBEE;
+  color: #D32F2F;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #FFE600;
+}
+
+.back-button {
+  background-color: #3483FA;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer
+}

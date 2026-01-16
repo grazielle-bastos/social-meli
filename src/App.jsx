@@ -1,9 +1,10 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import HomePage from './pages/HomePage';
-/*import FollowersPage from './pages/FollowersPage';
-import FollowedPage from './pages/FollowedPage';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { UserProvider } from "./UserContext";
+import Navigation from "./components/Navigation";
+import HomePage from "./pages/HomePage";
+import FollowersPage from "./pages/FollowersPage";
+/*import FollowedPage from './pages/FollowedPage';
 import FeedPage from './pages/FeedPage';
 import PublishPage from './pages/PublishPage';
 import PromoPage from './pages/PromoPage';*/
@@ -11,17 +12,22 @@ import PromoPage from './pages/PromoPage';*/
 function App() {
   return (
     <>
-      <Navigation />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-{/*}          <Route path="/users/:userId/followers" element={<FollowersPage />} />
-          <Route path="/users/:userId/followed" element={<FollowedPage />} />
+      <UserProvider>
+        <Navigation />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/users/:userId/followers"
+              element={<FollowersPage />}
+            />
+            {/* <Route path="/users/:userId/followed" element={<FollowedPage />} />
           <Route path="/users/:userId/feed" element={<FeedPage />} />
           <Route path="/publish" element={<PublishPage />} />
           <Route path="/users/:userId/promos" element={<PromoPage />} /> */}
-        </Routes>
-      </div>
+          </Routes>
+        </div>
+      </UserProvider>
     </>
   );
 }

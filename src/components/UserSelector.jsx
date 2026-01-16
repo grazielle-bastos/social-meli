@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useUser } from "../UserContext";
 
-function UserSelector({ onUserChange }) {
-  const [userId, setUserId] = useState(
-    localStorage.getItem("activeUserId") || ""
-  );
+function UserSelector() {
+  const { userId, setUserId } = useUser();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,21 +23,7 @@ function UserSelector({ onUserChange }) {
   }, []);
 
   function handleChange(event) {
-    const newUserId = parseInt(event.target.value, 10);
-
-    if (!newUserId) {
-      localStorage.removeItem("activeUserId");
-    } else {
-      localStorage.setItem("activeUserId", newUserId);
-    }
-
-    setUserId(newUserId);
-
-    window.dispatchEvent(new CustomEvent("userChanged", { detail: newUserId }));
-
-    if (onUserChange) {
-      onUserChange(newUserId);
-    }
+    setUserId(event.target.value);
   }
 
   return (
