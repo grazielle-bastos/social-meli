@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import UserSelector from "./UserSelector";
 import { useUser } from "../UserContext";
-import "./Navigation.css";
+import "../styles/Navigation.css";
 
 function Navigation() {
   const { userId } = useUser();

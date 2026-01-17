@@ -115,33 +115,6 @@
   font-weight: 500;
 }
 
-.discount-input {
-  position: relative;
-}
-
-.discount-input input {
-  padding-right: 30px;
-}
-
-.discount-input::after {
-  content: "%";
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  font-weight: 500;
-}
-
-.promo-section {
-  background-color: #FFFBE6;
-  border: 1px solid #FFE600;
-  border-radius: 6px;
-  padding: 16px;
-  margin-top: 16px;
-  animation: fadeIn 0.3s ease;
-}
-
 .user-selector-container {
   margin-bottom: 24px;
   padding: 16px;
@@ -171,6 +144,7 @@
   gap: 12px;
   margin-top: 16px;
 }
+
 .cancel-button {
   background-color: white;
   color: #666666;
@@ -183,7 +157,6 @@
   transition: all 0.2s ease;
   flex: 1;
 }
-
 .cancel-button:hover {
   background-color: #f5f5f5;
   border-color: #d0d0d0;
@@ -194,7 +167,6 @@
   transform: translateY(1px);
 }
 
-/* Atualização para o botão de submissão para que funcione em conjunto */
 .submit-button {
   background-color: #3483FA;
   color: white;
@@ -205,13 +177,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  flex: 2; /* Faz o botão de submissão ocupar mais espaço */
+  flex: 2;
 }
-
 .submit-button:hover {
   background-color: #2968c8;
 }
-
 .submit-button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
@@ -259,11 +229,6 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) {

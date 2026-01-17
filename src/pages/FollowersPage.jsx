@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "../UserContext";
-import "./FollowersPage.css";
+import "../styles/FollowersPage.css";
 
 function FollowersPage() {
   const params = useParams();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../UserContext";
-import "./HomePage.css";
+import "../styles/HomePage.css";
 
 function HomePage() {
   const { userId } = useUser();

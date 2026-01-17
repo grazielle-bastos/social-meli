@@ -1,31 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./PublishPage.css";
+import { useUser } from "../UserContext";
+import "../styles/PublishPage.css";
 
 function PublishPage() {
   const navigate = useNavigate();
-  const userId = localStorage.getItem("activeUserId");
+  const { userId } = useUser();
 
   const [formData, setFormData] = useState({
-    productName: "",
+    product_name: "",
     type: "",
     brand: "",
     color: "",
     notes: "",
     price: "",
-    hasPromo: false,
-    discount: 0,
   });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   }
 
@@ -36,28 +33,16 @@ function PublishPage() {
       setError("Você precisa selecionar um usuário para publicar.");
       return;
     }
-
-    if (!formData.productName?.trim()) {
+    if (!formData.product_name?.trim()) {
       setError("Nome do produto é obrigatório.");
       return;
     }
-
     if (!formData.type?.trim()) {
-      setError("Tipo do produto é obrigatório.");
+      setError("Categoria é obrigatória.");
       return;
     }
-
     if (isNaN(parseFloat(formData.price)) || parseFloat(formData.price) <= 0) {
       setError("Preço deve ser um número válido maior que zero.");
-      return;
-    }
-
-    if (
-      formData.hasPromo &&
-      (isNaN(parseFloat(formData.discount)) ||
-        parseFloat(formData.discount) <= 0)
-    ) {
-      setError("Desconto deve ser um número válido maior que zero.");
       return;
     }
 
@@ -65,47 +50,25 @@ function PublishPage() {
       setLoading(true);
       setError(null);
 
-      const productData = {
-        productName: formData.productName.trim(),
-        type: formData.type.trim(),
-        brand: formData.brand?.trim() || "",
-        color: formData.color?.trim() || "",
-        notes: formData.notes?.trim() || "",
-      };
-
-      const baseData = {
+      const finalData = {
+        userId: parseInt(userId, 10),
         date: new Date().toISOString().split("T")[0],
-        product: productData,
-        category: parseInt(formData.category || "1"),
+        product: {
+          productName: formData.product_name.trim(),
+          type: formData.type.trim(),
+          brand: formData.brand?.trim() || "",
+          color: formData.color?.trim() || "",
+          notes: formData.notes?.trim() || "",
+        },
+        category: 1,
         price: parseFloat(formData.price),
       };
 
-      let finalData;
-      const endpoint = formData.hasPromo
-        ? "http://localhost:8080/products/promo-pub"
-        : "http://localhost:8080/products/publish";
-
-      if (formData.hasPromo) {
-        finalData = {
-          ...baseData,
-          user_id: parseInt(userId),
-          has_promo: true,
-          discount: parseFloat(formData.discount),
-        };
-      } else {
-        finalData = {
-          ...baseData,
-          userId: parseInt(userId),
-        };
-      }
-
-      console.log("Enviando dados:", finalData); // Log para debug
+      const endpoint = "http://localhost:8080/products/publish";
 
       const response = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(finalData),
       });
 
@@ -118,11 +81,8 @@ function PublishPage() {
         throw new Error(`Falha ao criar publicação: ${errorMessage}`);
       }
 
-      const responseData = await response.json();
-      console.log("Publicação criada com sucesso:", responseData);
       navigate(`/users/${userId}/feed`);
     } catch (error) {
-      console.error("Erro detalhado:", error);
       setError(
         `Não foi possível criar a publicação: ${
           error.message || "Verifique os dados e tente novamente."
@@ -136,22 +96,19 @@ function PublishPage() {
   return (
     <div className="publish-page">
       <h1>Criar Publicação</h1>
-
       {error && <p className="error-message">{error}</p>}
-
       <form onSubmit={handleSubmit} className="publish-form">
         <div className="form-group">
-          <label htmlFor="productName">Nome do Produto:</label>
+          <label htmlFor="product_name">Nome do Produto:</label>
           <input
             type="text"
-            id="productName"
-            name="productName"
-            value={formData.productName}
+            id="product_name"
+            name="product_name"
+            value={formData.product_name}
             onChange={handleChange}
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="type">Categoria:</label>
           <input
@@ -163,7 +120,6 @@ function PublishPage() {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="brand">Marca:</label>
           <input
@@ -172,10 +128,8 @@ function PublishPage() {
             name="brand"
             value={formData.brand}
             onChange={handleChange}
-            required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="color">Cor:</label>
           <input
@@ -184,10 +138,8 @@ function PublishPage() {
             name="color"
             value={formData.color}
             onChange={handleChange}
-            required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="price">Preço (R$):</label>
           <input
@@ -201,7 +153,6 @@ function PublishPage() {
             required
           />
         </div>
-
         <div className="form-group">
           <label htmlFor="notes">Descrição:</label>
           <textarea
@@ -212,37 +163,6 @@ function PublishPage() {
             rows="4"
           />
         </div>
-
-        <div className="promo-checkbox">
-          <input
-            type="checkbox"
-            id="hasPromo"
-            checked={formData.hasPromo}
-            onChange={(e) =>
-              setFormData({ ...formData, hasPromo: e.target.checked })
-            }
-          />
-          <label htmlFor="hasPromo">
-            Este produto está em promoção
-            {formData.hasPromo && <span className="promo-badge">PROMO</span>}
-          </label>
-        </div>
-
-        {formData.hasPromo && (
-          <div className="form-group">
-            <label htmlFor="discount">Desconto (%):</label>
-            <input
-              type="number"
-              id="discount"
-              name="discount"
-              min="1"
-              max="99"
-              value={formData.discount}
-              onChange={handleChange}
-              required={formData.hasPromo}
-            />
-          </div>
-        )}
 
         <div className="form-actions">
           <button

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
-import "./FeedPage.css";
+import "../styles/FeedPage.css";
 import { useUser } from "../UserContext";
 
 function FeedPage() {
