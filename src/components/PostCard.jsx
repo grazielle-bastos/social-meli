@@ -2,6 +2,14 @@ import React from "react";
 import "./PostCard.css";
 
 function PostCard({ post }) {
+  const hasPromo = post.hasPromo || post.has_promo;
+  const discount = post.discount;
+
+  const originalPrice = post.price;
+  const discountedPrice = hasPromo
+    ? originalPrice - originalPrice * (discount / 100)
+    : null;
+
   if (!post || !post.product)
     return <div className="post-card">Post inválido</div>;
 
@@ -17,26 +25,52 @@ function PostCard({ post }) {
       <div className="post-header">
         <h3>{post.product.product_name}</h3>
         <span className="post-date">{formatDate(post.date)}</span>
+        <span className="post-category">{post.category}</span>
       </div>
+
       <div className="post-seller">
         <span>Vendedor ID: {post.user_id}</span>
       </div>
-      <div className="post-details">
-        <p>
-          <strong>Categoria:</strong> {post.product.type}
-        </p>
+
+      <div className="post-content">
         <p>
           <strong>Marca:</strong> {post.product.brand}
         </p>
         <p>
-          <strong>Cor:</strong> {post.product.color}
+          <strong>Tipo:</strong> {post.product.type}
         </p>
-        <div className="regular-price">R$ {price.toFixed(2)}</div>
-      </div>
-      {post.product.notes && (
-        <div className="post-description">
+        {post.product.color && (
           <p>
-            <strong>Descrição:</strong> {post.product.notes}
+            <strong>Cor:</strong> {post.product.color}
+          </p>
+        )}
+      </div>
+
+      <div className="post-price-container">
+        {hasPromo ? (
+          <>
+            <div className="promo-badge">{discount}% OFF</div>
+            <div className="price-display">
+              <span className="original-price">
+                R$ {originalPrice.toFixed(2)}
+              </span>
+              <span className="discounted-price">
+                R$ {discountedPrice.toFixed(2)}
+              </span>
+            </div>
+          </>
+        ) : (
+          <div className="price-display">
+            <span className="regular-price">R$ {originalPrice.toFixed(2)}</span>
+          </div>
+        )}
+      </div>
+
+      {post.product.notes && (
+        <div className="post-notes">
+          <p>
+            <strong>Descrição: </strong>
+            {post.product.notes}
           </p>
         </div>
       )}

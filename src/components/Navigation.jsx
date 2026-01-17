@@ -27,7 +27,6 @@ function Navigation() {
             <NavLink to={`/users/${userId}/followed`}>Quem eu sigo</NavLink>
             <NavLink to={`/users/${userId}/feed`}>Meu Feed</NavLink>
             <NavLink to="/publish">Criar Publicação</NavLink>
-            <NavLink to={`/users/${userId}/promo-pub`}>Promoções</NavLink>
           </>
         ) : (
           <>
@@ -35,7 +34,6 @@ function Navigation() {
             <span className="disabled-link">Quem eu sigo</span>
             <span className="disabled-link">Meu Feed</span>
             <span className="disabled-link">Criar Publicação</span>
-            <span className="disabled-link">Promoções</span>
           </>
         )}
       </div>

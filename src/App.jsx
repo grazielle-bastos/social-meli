@@ -6,8 +6,7 @@ import HomePage from "./pages/HomePage";
 import FollowersPage from "./pages/FollowersPage";
 import FollowedPage from "./pages/FollowedPage";
 import FeedPage from "./pages/FeedPage";
-/*import PublishPage from './pages/PublishPage';
-import PromoPage from './pages/PromoPage';*/
+import PublishPage from "./pages/PublishPage";
 
 function App() {
   return (
@@ -23,8 +22,7 @@ function App() {
             />
             <Route path="/users/:userId/followed" element={<FollowedPage />} />
             <Route path="/users/:userId/feed" element={<FeedPage />} />
-            {/* <Route path="/publish" element={<PublishPage />} />
-          <Route path="/users/:userId/promos" element={<PromoPage />} /> */}
+            <Route path="/publish" element={<PublishPage />} />
           </Routes>
         </div>
       </UserProvider>

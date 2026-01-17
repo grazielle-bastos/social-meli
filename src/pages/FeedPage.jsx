@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PostCard from "../components/PostCard";
 import "./FeedPage.css";
+import { useUser } from "../UserContext";
 
 function FeedPage() {
+  const params = useParams();
+  const contextUser = useUser();
+
+  const userId = contextUser.userId || params.userId;
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState("date_desc");
-  const { userId } = useParams(); // Pega o ID da URL
 
   useEffect(() => {
     async function fetchPosts() {
