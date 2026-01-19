@@ -6,8 +6,11 @@ function PostCard({ post }) {
     return <div className="post-card">Post inválido</div>;
 
   function formatDate(dateString) {
+    if (!dateString) return "";
+    const [year, month, day] = dateString.split("-");
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
     const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(dateString).toLocaleDateString("pt-BR", options);
+    return date.toLocaleDateString("pt-BR", options);
   }
 
   const price = post.price ?? 0;
