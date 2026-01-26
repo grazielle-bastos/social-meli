@@ -21,7 +21,7 @@ function FollowersPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/user/${userId}/followers/list?order=${order}`
+          `http://localhost:8080/user/${userId}/followers/list?order=${order}`,
         );
 
         if (!response.ok) {
@@ -29,12 +29,15 @@ function FollowersPage() {
         }
 
         const data = await response.json();
-        setFollowers(data.followers || []);
+
+        const followersArray = data.content || [];
+
+        setFollowers(followersArray);
         setError(null);
       } catch (error) {
         console.error("Erro:", error);
         setError(
-          "Não foi possível carregar seus seguidores. Tente novamente mais tarde."
+          "Não foi possível carregar seus seguidores. Tente novamente mais tarde.",
         );
       } finally {
         setLoading(false);

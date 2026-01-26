@@ -22,7 +22,7 @@ function FeedPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/products/followed/${userId}/list?order=${order}`
+          `http://localhost:8080/products/followed/${userId}/list?order=${order}`,
         );
 
         if (!response.ok) {
@@ -30,12 +30,15 @@ function FeedPage() {
         }
 
         const data = await response.json();
-        setPosts(data.posts || []);
+
+        const postsArray = data.posts?.content || [];
+
+        setPosts(postsArray);
         setError(null);
       } catch (error) {
         console.error("Erro:", error);
         setError(
-          "Não foi possível carregar o feed. Tente novamente mais tarde."
+          "Não foi possível carregar o feed. Tente novamente mais tarde.",
         );
       } finally {
         setLoading(false);

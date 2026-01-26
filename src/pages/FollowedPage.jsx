@@ -16,12 +16,14 @@ function FollowedPage() {
 
   useEffect(() => {
     async function fetchFollowed() {
-      if (!userId) return;
+      if (!userId) {
+        return;
+      }
 
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/user/${userId}/followed/list?order=${order}`
+          `http://localhost:8080/user/${userId}/followed/list?order=${order}`,
         );
 
         if (!response.ok) {
@@ -29,12 +31,15 @@ function FollowedPage() {
         }
 
         const data = await response.json();
-        setFollowed(data.followed || data || []);
+
+        const followedArray = data.content || [];
+
+        setFollowed(followedArray);
         setError(null);
       } catch (error) {
         console.error("Erro:", error);
         setError(
-          "Não foi possível carregar os vendedores que você segue. Tente novamente mais tarde."
+          "Não foi possível carregar os vendedores que você segue. Tente novamente mais tarde.",
         );
       } finally {
         setLoading(false);

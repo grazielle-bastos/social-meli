@@ -9,9 +9,20 @@ function UserSelector() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch("http://localhost:8080/user");
+        console.log("Iniciando busca de usuários...");
+        const response = await fetch("http://localhost:8080/user?size=1000");
+        console.log("Resposta recebida:", response);
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
         const data = await response.json();
-        setUsers(data);
+        console.log("Dados recebidos:", data);
+
+        const usersArray = data.content || [];
+        console.log("Usuários buscados:", usersArray);
+        setUsers(usersArray);
       } catch (error) {
         console.log("Erro ao buscar usuários:", error);
       } finally {
@@ -36,6 +47,7 @@ function UserSelector() {
         disabled={loading}
       >
         <option value="">Selecione um usuário</option>
+        {console.log("Renderizando opções com users:", users)}
         {users.length > 0 ? (
           users.map((user) => (
             <option key={user.userId} value={user.userId}>
