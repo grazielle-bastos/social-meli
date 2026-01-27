@@ -21,7 +21,7 @@ function FollowersPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/user/${userId}/followers/list?order=${order}`,
+          `http://localhost:8080/user/${userId}/followers/list?order=${order}&page=0&size=1000`,
         );
 
         if (!response.ok) {

@@ -118,6 +118,44 @@
   cursor: not-allowed;
 }
 
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.pagination-button {
+  padding: 8px 16px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pagination-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #357abD;
+}
+
+.page-info {
+  font-size: 14px;
+  color: #666;
+}
+
 @media (max-width: 768px) {
   .feed-list {
     grid-template-columns: 1fr;

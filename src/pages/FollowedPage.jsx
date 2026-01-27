@@ -23,7 +23,7 @@ function FollowedPage() {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/user/${userId}/followed/list?order=${order}`,
+          `http://localhost:8080/user/${userId}/followed/list?order=${order}&page=0&size=1000`,
         );
 
         if (!response.ok) {
