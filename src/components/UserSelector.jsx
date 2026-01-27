@@ -39,7 +39,7 @@ function UserSelector() {
 
   return (
     <div className="user-selector">
-      <label htmlFor="user-select">ID do usuário ativo:</label>
+      <label htmlFor="user-select">Usuário ativo:</label>
       <select
         id="user-select"
         value={userId}
@@ -50,8 +50,8 @@ function UserSelector() {
         {console.log("Renderizando opções com users:", users)}
         {users.length > 0 ? (
           users.map((user) => (
-            <option key={user.userId} value={user.userId}>
-              {user.userId}
+            <option key={user.userName} value={user.userName}>
+              {user.userName}
             </option>
           ))
         ) : (
