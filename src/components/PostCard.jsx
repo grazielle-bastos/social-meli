@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/PostCard.css";
 
 function PostCard({ post }) {
+  console.log("Objeto post completo:", post);
+
   if (!post || !post.product)
     return <div className="post-card">Post inválido</div>;
 
