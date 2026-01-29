@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../UserContext";
 import "../styles/PublishPage.css";
@@ -16,39 +16,156 @@ function PublishPage() {
     price: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
+  const [generalError, setGeneralError] = useState(null);
+  const [touched, setTouched] = useState({});
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+
+    if (name === "type") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: null,
+      }));
+    }
+  }
+
+  function handleBlur(e) {
+    const { name } = e.target;
+    setTouched((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: true,
     }));
+
+    validateField(name, formData[name]);
+  }
+
+  function validateField(fieldName, value) {
+    let newErrors = { ...errors };
+
+    switch (fieldName) {
+      case "product_name":
+        if (!value?.trim()) {
+          newErrors.product_name = "Nome do produto é obrigatório";
+        } else if (value.trim().length < 3) {
+          newErrors.product_name =
+            "Nome do produto deve ter pelo menos 3 caracteres";
+        } else if (value.trim().length > 100) {
+          newErrors.product_name =
+            "Nome do produto não pode exceder 100 caracteres";
+        } else {
+          newErrors.product_name = null;
+        }
+        break;
+
+      case "type":
+        if (!value) {
+          newErrors.type = "Categoria é obrigatória";
+        } else if (!/^\d+$/.test(value)) {
+          newErrors.type = "Categoria deve ser um número";
+        } else if (parseInt(value) <= 0) {
+          newErrors.type = "Categoria deve ser um número positivo";
+        } else if (parseInt(value) > 10000) {
+          newErrors.type = "Categoria inválida";
+        } else {
+          newErrors.type = null;
+        }
+        break;
+
+      case "price":
+        if (!value) {
+          newErrors.price = "Preço é obrigatório";
+        } else if (isNaN(parseFloat(value))) {
+          newErrors.price = "Preço deve ser um número válido";
+        } else if (parseFloat(value) <= 0) {
+          newErrors.price = "Preço deve ser maior que zero";
+        } else if (parseFloat(value) > 1000000) {
+          newErrors.price = "Preço não pode exceder 1.000.000";
+        } else {
+          newErrors.price = null;
+        }
+        break;
+
+      case "brand":
+        if (value?.trim().length > 50) {
+          newErrors.brand = "Marca não pode exceder 50 caracteres";
+        } else {
+          newErrors.brand = null;
+        }
+        break;
+
+      case "color":
+        if (value?.trim().length > 30) {
+          newErrors.color = "Cor não pode exceder 30 caracteres";
+        } else {
+          newErrors.color = null;
+        }
+        break;
+
+      case "notes":
+        if (value?.trim().length > 500) {
+          newErrors.notes = "Observações não podem exceder 500 caracteres";
+        } else {
+          newErrors.notes = null;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+    return !newErrors[fieldName];
+  }
+
+  function validateForm() {
+    let isValid = true;
+    let newErrors = {};
+    let newTouched = {};
+
+    Object.keys(formData).forEach((field) => {
+      newTouched[field] = true;
+      const fieldIsValid = validateField(field, formData[field]);
+      if (!fieldIsValid) isValid = false;
+      newErrors[field] = errors[field];
+    });
+
+    if (!userId) {
+      setGeneralError("Você precisa selecionar um usuário para publicar.");
+      isValid = false;
+    } else {
+      setGeneralError(null);
+    }
+
+    setTouched(newTouched);
+    setErrors(newErrors);
+    return isValid;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!userId) {
-      setError("Você precisa selecionar um usuário para publicar.");
-      return;
-    }
-    if (!formData.product_name?.trim()) {
-      setError("Nome do produto é obrigatório.");
-      return;
-    }
-    if (!formData.type?.trim()) {
-      setError("Categoria é obrigatória.");
-      return;
-    }
-    if (isNaN(parseFloat(formData.price)) || parseFloat(formData.price) <= 0) {
-      setError("Preço deve ser um número válido maior que zero.");
+    if (!validateForm()) {
       return;
     }
 
     try {
       setLoading(true);
-      setError(null);
+      setGeneralError(null);
 
       const finalData = {
         userId: parseInt(userId, 10),
@@ -60,7 +177,7 @@ function PublishPage() {
           color: formData.color?.trim() || "",
           notes: formData.notes?.trim() || "",
         },
-        category: 1,
+        category: parseInt(formData.type, 10),
         price: parseFloat(formData.price),
       };
 
@@ -83,10 +200,10 @@ function PublishPage() {
 
       navigate(`/users/${userId}/feed`);
     } catch (error) {
-      setError(
+      setGeneralError(
         `Não foi possível criar a publicação: ${
           error.message || "Verifique os dados e tente novamente."
-        }`
+        }`,
       );
     } finally {
       setLoading(false);
@@ -96,7 +213,7 @@ function PublishPage() {
   return (
     <div className="publish-page">
       <h1>Criar Publicação</h1>
-      {error && <p className="error-message">{error}</p>}
+      {generalError && <p className="error-message">{generalError}</p>}
       <form onSubmit={handleSubmit} className="publish-form">
         <div className="form-group">
           <label htmlFor="product_name">Nome do Produto:</label>
@@ -106,9 +223,17 @@ function PublishPage() {
             name="product_name"
             value={formData.product_name}
             onChange={handleChange}
-            required
+            onBlur={handleBlur}
+            className={
+              touched.product_name && errors.product_name ? "input-error" : ""
+            }
+            placeholder="Digite o nome do produto"
           />
+          {touched.product_name && errors.product_name && (
+            <p className="error-text">{errors.product_name}</p>
+          )}
         </div>
+
         <div className="form-group">
           <label htmlFor="type">Categoria:</label>
           <input
@@ -117,9 +242,15 @@ function PublishPage() {
             name="type"
             value={formData.type}
             onChange={handleChange}
-            required
+            onBlur={handleBlur}
+            className={touched.type && errors.type ? "input-error" : ""}
+            placeholder="Digite a categoria do produto"
           />
+          {touched.type && errors.type && (
+            <p className="error-text">{errors.type}</p>
+          )}
         </div>
+
         <div className="form-group">
           <label htmlFor="brand">Marca:</label>
           <input
@@ -128,8 +259,15 @@ function PublishPage() {
             name="brand"
             value={formData.brand}
             onChange={handleChange}
+            onBlur={handleBlur}
+            className={touched.brand && errors.brand ? "input-error" : ""}
+            placeholder="Digite a marca (opcional)"
           />
+          {touched.brand && errors.brand && (
+            <p className="error-text">{errors.brand}</p>
+          )}
         </div>
+
         <div className="form-group">
           <label htmlFor="color">Cor:</label>
           <input
@@ -138,21 +276,41 @@ function PublishPage() {
             name="color"
             value={formData.color}
             onChange={handleChange}
+            onBlur={handleBlur}
+            className={touched.color && errors.color ? "input-error" : ""}
+            placeholder="Digite a cor (opcional)"
           />
+          {touched.color && errors.color && (
+            <p className="error-text">{errors.color}</p>
+          )}
         </div>
+
         <div className="form-group">
-          <label htmlFor="price">Preço (R$):</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            min="0.01"
-            step="0.01"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="price">Preço:</label>
+          <div className="price-input-container">
+            <span className="currency-symbol">R$</span>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              step="0.01"
+              min="0.01"
+              className={
+                touched.price && errors.price
+                  ? "input-error price-input"
+                  : "price-input"
+              }
+              placeholder="0,00"
+            />
+          </div>
+          {touched.price && errors.price && (
+            <p className="error-text">{errors.price}</p>
+          )}
         </div>
+
         <div className="form-group">
           <label htmlFor="notes">Descrição:</label>
           <textarea
@@ -160,8 +318,17 @@ function PublishPage() {
             name="notes"
             value={formData.notes}
             onChange={handleChange}
+            onBlur={handleBlur}
+            className={touched.notes && errors.notes ? "input-error" : ""}
+            placeholder="Observações adicionais sobre o produto (opcional)"
             rows="4"
-          />
+          ></textarea>
+          {touched.notes && errors.notes && (
+            <p className="error-text">{errors.notes}</p>
+          )}
+          {formData.notes && (
+            <p className="char-count">{formData.notes.length}/500 caracteres</p>
+          )}
         </div>
 
         <div className="form-actions">

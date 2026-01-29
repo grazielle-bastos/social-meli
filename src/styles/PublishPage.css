@@ -226,6 +226,37 @@
   animation: spin 1s linear infinite;
 }
 
+.input-error {
+  border: 1px solid #e74c3c !important;
+  background-color: #ffeaea;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.price-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 10px;
+  color: #666;
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
